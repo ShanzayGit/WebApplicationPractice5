@@ -1,0 +1,89 @@
+﻿@{
+}
+@model WebApplicationPractice5.ViewModels.HomeViewModel;
+
+<html>
+    <head>
+        <title>Home Page</title>
+    </head>
+    <body>
+        <h1>Welcome to our Book Store</h1>
+        <hr />
+        <h2>Add Book</h2>
+        <form action="/Home/AddBook" method="post">
+        <label for="title" class="form-label">Book Title </label>
+        <input class="form-control" type="text" placeholder="Book Title" name="title" id="title" required/>
+        <label for="price" class="form-label">Book Price </label>
+        <input class="form-control" type="number" placeholder="1500" name="price" id="price" required />
+        <label class="form-label" for="authorId">Author Name </label>
+        <select id="authorId" class="form-select" name="authorId" required>
+            @foreach(var a in Model.Authors)
+            {
+                <option value="@a.ID" >@a.Name</option>
+            }
+        </select>
+        <button class="btn btn-outline-primary" type="submit">Add </button>
+    </form>
+    <hr />
+    <h2>Add Author</h2>
+    <form action="/Home/AddAuthor" method="post">
+        <label for="name" class="form-label">Author Name </label>
+        <input class="form-control" type="text" placeholder="e.g. John Doe" name="name" id="name" required />
+        <label for="country" class="form-label">Author Country </label>
+        <input class="form-control" type="text" placeholder="e.g. United States" name="country" id="country" required />
+        <button class="btn btn-outline-primary" type="submit">Add </button>
+
+    </form>
+    <hr />
+    <h2>Avaiable Books</h2>
+    @if(Model.Books.Count>0)
+    {
+        <div class="container">
+           <div class="row">
+
+        @foreach(var b in Model.Books)
+        {
+                <div class="col-sm-12 col-md-6">
+                    <div class="book-card card">
+                        <div class="card-body">
+                            <h3 class="card-title">Book Title : @b.Title</h3>
+                            <div class="card-text">
+                                <p>Author Name : @b.AuthorName</p>
+                                <p>Price : Rs. @b.Price</p>
+                            </div>
+                            <form action="/Home/RemoveBook" method="post" onsubmit="return confirmRemove()">
+                                <input type="hidden" value="@b.Id" name="id" />
+                                <button type="submit" class="btn btn-danger">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        }
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <p>No books available.</p>
+    }
+</body>
+</html>
+@section Styles{
+    <style>
+   .book-card{ 
+    margin:15px;
+    padding:5px;
+    border:4px solid black;
+    border-radius:8px;
+    width:auto;}
+    </style>
+}
+@section Script{
+    <script>
+        function confirmRemove()
+        {
+            return confirm("Remove this Book");
+        }
+    </script>
+}
